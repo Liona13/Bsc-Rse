@@ -6,6 +6,16 @@ import Link from "next/link"
 import { ScrollAnimation } from "../ui/ScrollAnimation"
 import { motion } from "framer-motion"
 
+interface ContactForm {
+  name: string
+  email: string
+  subject: string
+  message: string
+  type: 'job' | 'project' | 'other'
+  budget?: string
+  timeline?: string
+}
+
 export function Contact() {
   const contactItems = [
     { href: "mailto:your.email@example.com", icon: Mail, text: "Email", color: "from-blue-500/20 to-blue-600/20" },

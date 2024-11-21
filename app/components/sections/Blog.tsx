@@ -5,47 +5,37 @@ import { ScrollAnimation } from "../ui/ScrollAnimation"
 import { motion } from "framer-motion"
 import { Calendar, Clock, ArrowRight, Tag } from 'lucide-react'
 import Link from "next/link"
-
-interface BlogPost {
-  title: string
-  description: string
-  date: string
-  readTime: string
-  tags: string[]
-  image?: string
-  url: string
-}
+import { useState, useEffect } from "react"
+import { BlogPost } from "@/types/blog"
+import { LoadingState } from "../ui/LoadingState"
+import { ErrorState } from "../ui/ErrorState"
 
 export function Blog() {
-  const blogPosts: BlogPost[] = [
-    {
-      title: "Building Scalable Microservices with Node.js",
-      description: "A comprehensive guide to designing and implementing microservices architecture using Node.js and Docker.",
-      date: "2024-01-15",
-      readTime: "8 min read",
-      tags: ["Microservices", "Node.js", "Docker"],
-      image: "/blog/microservices.jpg",
-      url: "#"
-    },
-    {
-      title: "Advanced React Patterns for Enterprise Applications",
-      description: "Exploring advanced React patterns and best practices for building large-scale applications.",
-      date: "2024-01-10",
-      readTime: "10 min read",
-      tags: ["React", "TypeScript", "Architecture"],
-      image: "/blog/react-patterns.jpg",
-      url: "#"
-    },
-    {
-      title: "Optimizing Web Performance: A Deep Dive",
-      description: "Learn how to improve your website's performance through advanced optimization techniques.",
-      date: "2024-01-05",
-      readTime: "12 min read",
-      tags: ["Performance", "Web", "Optimization"],
-      image: "/blog/web-performance.jpg",
-      url: "#"
+  const [posts, setPosts] = useState<BlogPost[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch('/api/blog')
+        if (!response.ok) throw new Error('Failed to fetch posts')
+        const data = await response.json()
+        setPosts(data.filter((post: BlogPost) => post.published).slice(0, 3))
+      } catch (err) {
+        console.error('Error fetching blog posts:', err)
+        setError('Failed to load blog posts')
+      } finally {
+        setIsLoading(false)
+      }
     }
-  ]
+
+    fetchPosts()
+  }, [])
+
+  if (isLoading) return <LoadingState />
+  if (error) return <ErrorState message={error} />
 
   return (
     <section id="blog" className="py-16 sm:py-20 relative">
@@ -72,16 +62,13 @@ export function Blog() {
         </ScrollAnimation>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {blogPosts.map((post, index) => (
-            <ScrollAnimation key={index}>
-              <Link href={post.url}>
+          {posts.map((post) => (
+            <ScrollAnimation key={post.slug}>
+              <Link href={`/blog/${post.slug}`}>
                 <Card className="glassmorphic-depth hover:scale-[1.02] transition-all duration-300 group h-full">
                   <CardContent className="p-6 relative overflow-hidden h-full flex flex-col">
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="absolute inset-0 glass-shimmer opacity-0 group-hover:opacity-100" />
-                    
+                    {/* Content */}
                     <div className="relative z-10 flex flex-col flex-1">
-                      {/* Image */}
                       {post.image && (
                         <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -94,7 +81,6 @@ export function Blog() {
                         </div>
                       )}
 
-                      {/* Content */}
                       <div className="flex-1 space-y-4">
                         <h3 className="font-display text-lg font-semibold text-white/90 line-clamp-2">
                           {post.title}
@@ -104,10 +90,9 @@ export function Blog() {
                         </p>
                       </div>
 
-                      {/* Footer */}
                       <div className="mt-4 pt-4 border-t border-white/10">
                         <div className="flex flex-wrap gap-2 mb-3">
-                          {post.tags.map((tag, idx) => (
+                          {post.tags.slice(0, 3).map((tag, idx) => (
                             <span
                               key={idx}
                               className="px-2 py-1 rounded-full text-xs font-medium bg-white/10 text-white/70 flex items-center gap-1"

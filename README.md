@@ -1,17 +1,17 @@
 # Modern Portfolio Website
 
-A modern, glassmorphic portfolio website built with Next.js 14, TypeScript, Tailwind CSS, and Framer Motion.
+A modern, responsive portfolio website built with Next.js 14, TypeScript, Tailwind CSS, and Framer Motion.
 
 ## Features
 
-- 🎨 Modern glassmorphic design
-- ✨ Smooth animations and transitions
-- 📱 Fully responsive
-- 🌙 Dark mode optimized
-- 🎯 SEO friendly
-- 📄 Downloadable PDF resume
-- 📝 Blog section
-- 🎉 Interactive UI elements
+- 🎨 Modern and Clean Design with Glassmorphism effects
+- 🚀 Built with Next.js 14 and TypeScript
+- 📱 Fully Responsive
+- ✨ Smooth Animations with Framer Motion
+- 📝 MDX Blog Support
+- 📄 PDF Resume Generation
+- 🌙 Dark Mode Optimized
+- 🎯 SEO Optimized
 
 ## Tech Stack
 
@@ -19,13 +19,13 @@ A modern, glassmorphic portfolio website built with Next.js 14, TypeScript, Tail
 - TypeScript
 - Tailwind CSS
 - Framer Motion
+- MDX
 - PDF-lib
-- Lucide Icons
 
 ## Getting Started
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/modern-portfolio-website.git
+git clone https://
 ```

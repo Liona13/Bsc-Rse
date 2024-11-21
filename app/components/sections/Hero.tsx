@@ -5,6 +5,9 @@ import { ScrollAnimation } from "../ui/ScrollAnimation"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 import { Download } from 'lucide-react'
+import { PDFPreview } from "../ui/PDFPreview"
+import { downloadResume } from "../ui/PDFResume"
+import { ResumePreview } from "../ui/ResumePreview"
 
 export function Hero() {
   const containerVariants = {
@@ -86,18 +89,7 @@ export function Hero() {
                     </motion.button>
                   </Link>
                   
-                  <Link href="/resume.pdf" target="_blank">
-                    <motion.button
-                      className="px-8 py-3 rounded-lg border border-white/10 hover:border-white/20 text-white/70 hover:text-white transition-all relative group overflow-hidden flex items-center gap-2"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Download className="w-4 h-4" />
-                      <span className="relative z-10">Download CV</span>
-                      <div className="absolute inset-0 bg-white/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <div className="absolute inset-0 glass-shimmer" />
-                    </motion.button>
-                  </Link>
+                  <ResumePreview />
                 </motion.div>
 
                 {/* Quick Stats */}

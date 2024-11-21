@@ -3,10 +3,17 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { siteConfig } from "@/config/site"
+import { Github, Linkedin, Twitter } from "@/components/icons"
 
 const footerLinks = [
   { text: 'Terms of Service', href: '/terms' },
   { text: 'Privacy Policy', href: '/privacy' },
+] as const
+
+const socialLinks = [
+  { text: 'GitHub', href: siteConfig.links.github, icon: Github },
+  { text: 'LinkedIn', href: siteConfig.links.linkedin, icon: Linkedin },
+  { text: 'Twitter', href: siteConfig.links.twitter, icon: Twitter }
 ] as const
 
 export function Footer() {
@@ -96,6 +103,19 @@ export function Footer() {
                     whileHover={{ scaleX: 1 }}
                     transition={{ duration: 0.3 }}
                   />
+                </Link>
+              </motion.div>
+            ))}
+            {socialLinks.map((link, index) => (
+              <motion.div key={link.text} variants={linkVariants} initial="initial" whileHover="hover">
+                <Link 
+                  className="text-xs text-white/50 hover:text-white transition-colors font-sans flex items-center gap-2"
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <link.icon className="w-4 h-4" />
+                  {link.text}
                 </Link>
               </motion.div>
             ))}

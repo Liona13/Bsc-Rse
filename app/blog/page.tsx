@@ -2,23 +2,96 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
-import { Calendar, Clock, Tag, ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { ScrollAnimation } from "@/components/ui/ScrollAnimation"
+import { BlogSearch } from "@/components/ui/BlogSearch"
+import { BlogCard } from "@/components/ui/BlogCard"
+import { useState, useEffect } from "react"
+import { getAllPosts, getAllTags } from "@/lib/blog"
+import { LoadingState } from "@/components/ui/LoadingState"
+import { ErrorState } from "@/components/ui/ErrorState"
+import { BlogPost } from "@/types/blog"
+import { blogConfig } from "@/config/blog"
+import { sortPosts, filterPublishedPosts } from "@/lib/blog/utils"
 
 export default function BlogPage() {
-  const posts = [
-    {
-      slug: "building-scalable-microservices",
-      title: "Building Scalable Microservices with Node.js",
-      description: "A comprehensive guide to designing and implementing microservices architecture using Node.js and Docker.",
-      date: "2024-01-15",
-      readTime: "8 min read",
-      tags: ["Microservices", "Node.js", "Docker"],
-      image: "/blog/microservices.jpg",
-    },
-    // Add more blog posts...
-  ]
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [sortBy, setSortBy] = useState<'date' | 'title' | 'readTime'>('date')
+  const [posts, setPosts] = useState<BlogPost[]>([])
+  const [tags, setTags] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true)
+        const [allPosts, availableTags] = await Promise.all([
+          getAllPosts(),
+          getAllTags()
+        ])
+        setPosts(filterPublishedPosts(sortPosts(allPosts)))
+        setTags(availableTags)
+
+        // Update page metadata
+        document.title = blogConfig.metadata.title
+        const metaDescription = document.querySelector('meta[name="description"]')
+        if (metaDescription) {
+          metaDescription.setAttribute('content', blogConfig.metadata.description)
+        }
+      } catch (err) {
+        console.error('Error fetching blog data:', err)
+        setError('Failed to load blog posts')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  // Filter and sort posts
+  const filteredPosts = posts
+    .filter(post => {
+      // Apply search filter
+      if (searchQuery) {
+        const searchContent = `${post.title} ${post.description} ${post.tags.join(' ')}`.toLowerCase()
+        const searchTerms = searchQuery.toLowerCase().split(' ')
+        if (!searchTerms.every(term => searchContent.includes(term))) {
+          return false
+        }
+      }
+
+      // Apply tag filter
+      if (selectedTags.length > 0) {
+        return selectedTags.every(tag => post.tags.includes(tag))
+      }
+
+      return true
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'date':
+          return new Date(b.date).getTime() - new Date(a.date).getTime()
+        case 'title':
+          return a.title.localeCompare(b.title)
+        case 'readTime':
+          return parseInt(b.readTime) - parseInt(a.readTime)
+        default:
+          return 0
+      }
+    })
+
+  // Pagination
+  const paginatedPosts = filteredPosts.slice(
+    (currentPage - 1) * blogConfig.postsPerPage,
+    currentPage * blogConfig.postsPerPage
+  )
+
+  if (isLoading) return <LoadingState />
+  if (error) return <ErrorState message={error} />
 
   return (
     <div className="min-h-screen relative">
@@ -52,71 +125,54 @@ export default function BlogPage() {
               </h1>
             </div>
 
+            {/* Search and Filters */}
+            <BlogSearch
+              onSearch={setSearchQuery}
+              onTagSelect={(tag) => {
+                setSelectedTags(prev => 
+                  prev.includes(tag)
+                    ? prev.filter(t => t !== tag)
+                    : [...prev, tag]
+                )
+              }}
+              onSortChange={setSortBy}
+              selectedTags={selectedTags}
+              availableTags={tags}
+            />
+
             {/* Posts Grid */}
             <div className="grid gap-6 md:grid-cols-2">
-              {posts.map((post, index) => (
-                <ScrollAnimation key={post.slug}>
-                  <Link href={`/blog/${post.slug}`}>
-                    <Card className="glassmorphic-depth hover:scale-[1.02] transition-all duration-300 group h-full">
-                      <CardContent className="p-6 relative overflow-hidden h-full">
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                        <div className="absolute inset-0 glass-shimmer opacity-0 group-hover:opacity-100" />
-                        
-                        <div className="relative z-10 space-y-4">
-                          {/* Image */}
-                          {post.image && (
-                            <div className="relative w-full h-48 rounded-lg overflow-hidden">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
-                                src={post.image}
-                                alt={post.title}
-                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                              />
-                              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                            </div>
-                          )}
-
-                          {/* Content */}
-                          <div className="space-y-2">
-                            <h2 className="font-display text-xl font-semibold text-white/90">
-                              {post.title}
-                            </h2>
-                            <p className="text-white/60 text-sm line-clamp-2">
-                              {post.description}
-                            </p>
-                          </div>
-
-                          {/* Footer */}
-                          <div className="pt-4 border-t border-white/10">
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              {post.tags.map((tag, idx) => (
-                                <span
-                                  key={idx}
-                                  className="px-2 py-1 rounded-full text-xs font-medium bg-white/10 text-white/70 flex items-center gap-1"
-                                >
-                                  <Tag className="w-3 h-3" />
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                            <div className="flex items-center justify-between text-white/50 text-sm">
-                              <div className="flex items-center gap-2">
-                                <Calendar className="w-4 h-4" />
-                                <span>{new Date(post.date).toLocaleDateString()}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <Clock className="w-4 h-4" />
-                                <span>{post.readTime}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </ScrollAnimation>
-              ))}
+              {paginatedPosts.length > 0 ? (
+                paginatedPosts.map((post) => (
+                  <ScrollAnimation key={post.slug}>
+                    <BlogCard post={post} />
+                  </ScrollAnimation>
+                ))
+              ) : (
+                <div className="col-span-2 text-center py-12">
+                  <p className="text-white/60">No posts found matching your criteria.</p>
+                </div>
+              )}
             </div>
+
+            {/* Pagination */}
+            {filteredPosts.length > blogConfig.postsPerPage && (
+              <div className="flex justify-center gap-2">
+                {Array.from({ length: Math.ceil(filteredPosts.length / blogConfig.postsPerPage) }).map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentPage(idx + 1)}
+                    className={`px-4 py-2 rounded-lg ${
+                      currentPage === idx + 1
+                        ? 'bg-blue-500/20 text-white'
+                        : 'bg-white/10 text-white/70 hover:bg-white/20'
+                    } transition-colors`}
+                  >
+                    {idx + 1}
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.div>
         </div>
       </main>

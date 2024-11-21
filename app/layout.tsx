@@ -25,6 +25,14 @@ const inter = Inter({
 export const metadata = {
   title: 'Portfolio',
   description: 'My professional portfolio',
+  openGraph: {
+    title: 'Portfolio',
+    description: 'My professional portfolio',
+    url: 'https://example.com',
+    siteName: 'Portfolio',
+    images: [{ url: '/favicon.svg' }],
+    type: 'website',
+  },
   icons: {
     icon: '/favicon.svg',
   },

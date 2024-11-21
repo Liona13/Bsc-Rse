@@ -6,6 +6,21 @@ import { motion } from "framer-motion"
 import { Github, ExternalLink, Folder, Star, GitFork } from 'lucide-react'
 import Link from "next/link"
 
+interface Project {
+  title: string
+  description: string
+  technologies: string[]
+  image: string
+  demoUrl?: string
+  githubUrl?: string
+  featured: boolean
+  details: {
+    challenge: string
+    solution: string
+    impact: string
+  }
+}
+
 export function Projects() {
   const projects = [
     {
