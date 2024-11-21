@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Github, Linkedin, Mail, Phone } from 'lucide-react'
 import Link from "next/link"
-import { ScrollAnimation } from "@/components/ui/ScrollAnimation"
+import { ScrollAnimation } from "../ui/ScrollAnimation"
 import { motion } from "framer-motion"
 
 export function Contact() {

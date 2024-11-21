@@ -2,8 +2,16 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
+import { siteConfig } from "@/config/site"
+
+const footerLinks = [
+  { text: 'Terms of Service', href: '/terms' },
+  { text: 'Privacy Policy', href: '/privacy' },
+] as const
 
 export function Footer() {
+  const currentYear = new Date().getFullYear()
+
   const linkVariants = {
     initial: { opacity: 0.7, y: 0 },
     hover: { 
@@ -58,7 +66,7 @@ export function Footer() {
             transition={{ duration: 0.2 }}
           >
             <p className="text-xs text-white/50 font-sans relative group">
-              © 2024 Your Name. All rights reserved.
+              © {currentYear} {siteConfig.name}. All rights reserved.
               <motion.span 
                 className="absolute -bottom-1 left-0 w-full h-px bg-gradient-to-r from-white/0 via-white/20 to-white/0"
                 initial={{ scaleX: 0 }}
@@ -69,9 +77,9 @@ export function Footer() {
           </motion.div>
           
           <nav className="flex gap-4 sm:gap-6">
-            {['Terms of Service', 'Privacy'].map((text, index) => (
+            {footerLinks.map((link, index) => (
               <motion.div 
-                key={text}
+                key={link.text}
                 variants={linkVariants}
                 initial="initial"
                 whileHover="hover"
@@ -79,9 +87,9 @@ export function Footer() {
               >
                 <Link 
                   className="text-xs text-white/50 hover:text-white transition-colors font-sans relative group"
-                  href="#"
+                  href={link.href}
                 >
-                  {text}
+                  {link.text}
                   <motion.span 
                     className="absolute -bottom-1 left-0 w-full h-px bg-gradient-to-r from-white/0 via-white/30 to-white/0"
                     initial={{ scaleX: 0 }}

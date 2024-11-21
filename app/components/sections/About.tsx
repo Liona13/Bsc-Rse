@@ -1,7 +1,7 @@
 'use client'
 
 import { Card, CardContent } from "@/components/ui/card"
-import { ScrollAnimation } from "@/components/ui/ScrollAnimation"
+import { ScrollAnimation } from "../ui/ScrollAnimation"
 import { motion } from "framer-motion"
 
 export function About() {

@@ -1,16 +1,22 @@
 'use client'
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import { Header } from "@/components/layout/Header"
-import { Footer } from "@/components/layout/Footer"
-import { Hero } from "@/components/sections/Hero"
-import { About } from "@/components/sections/About"
-import { Skills } from "@/components/sections/Skills"
-import { Experience } from "@/components/sections/Experience"
-import { Contact } from "@/components/sections/Contact"
+import { Header } from "./components/layout/Header"
+import { Footer } from "./components/layout/Footer"
+import { About } from "./components/sections/About"
+import { Contact } from "./components/sections/Contact"
+import { Experience } from "./components/sections/Experience"
+import { Hero } from "./components/sections/Hero"
+import { Skills } from "./components/sections/Skills"
+import { ScrollProgress } from "./components/ui/ScrollProgress"
+import { ScrollToTop } from "./components/ui/ScrollToTop"
 import { useRef } from "react"
-import { ScrollProgress } from "@/components/ui/ScrollProgress"
-import { ScrollToTop } from "@/components/ui/ScrollToTop"
+import { Education } from "./components/sections/Education"
+import { Projects } from "./components/sections/Projects"
+import { Certifications } from "./components/sections/Certifications"
+import { Testimonials } from "./components/sections/Testimonials"
+import { Timeline } from "./components/sections/Timeline"
+import { Blog } from "./components/sections/Blog"
 
 export default function Home() {
   const { scrollYProgress } = useScroll()
@@ -43,8 +49,14 @@ export default function Home() {
             <div className="space-y-24 py-16">
               <Hero />
               <About />
-              <Skills />
+              <Timeline />
+              <Education />
               <Experience />
+              <Skills />
+              <Projects />
+              <Blog />
+              <Certifications />
+              <Testimonials />
               <Contact />
             </div>
           </div>

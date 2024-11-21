@@ -2,40 +2,77 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
-import { ScrollAnimation } from "@/components/ui/ScrollAnimation"
+import { ScrollAnimation } from "../ui/ScrollAnimation"
+import { Code2, Palette, Database, Cloud, Brain, Terminal } from 'lucide-react'
 
 export function Skills() {
-  const skillCards = [
-    { 
+  const skillCategories = [
+    {
       title: "Frontend Development",
-      description: "HTML, CSS, JavaScript, React, Next.js, Tailwind CSS",
+      icon: Code2,
       skills: [
-        { name: "HTML/CSS", proficiency: 90 },
-        { name: "JavaScript", proficiency: 85 },
-        { name: "React", proficiency: 80 },
-        { name: "Next.js", proficiency: 75 },
+        { name: "React/Next.js", level: "Expert", proficiency: 95 },
+        { name: "TypeScript", level: "Expert", proficiency: 90 },
+        { name: "Tailwind CSS", level: "Expert", proficiency: 95 },
+        { name: "HTML5/CSS3", level: "Expert", proficiency: 95 },
+        { name: "Redux/Zustand", level: "Advanced", proficiency: 85 },
       ]
     },
-    { 
+    {
       title: "Backend Development",
-      description: "Node.js, Express, MongoDB, PostgreSQL, GraphQL",
+      icon: Database,
       skills: [
-        { name: "Node.js", proficiency: 85 },
-        { name: "Express", proficiency: 80 },
-        { name: "MongoDB", proficiency: 75 },
-        { name: "PostgreSQL", proficiency: 70 },
+        { name: "Node.js", level: "Expert", proficiency: 90 },
+        { name: "Python", level: "Advanced", proficiency: 85 },
+        { name: "PostgreSQL", level: "Advanced", proficiency: 85 },
+        { name: "MongoDB", level: "Advanced", proficiency: 80 },
+        { name: "GraphQL", level: "Advanced", proficiency: 80 },
       ]
     },
-    { 
+    {
+      title: "DevOps & Cloud",
+      icon: Cloud,
+      skills: [
+        { name: "AWS", level: "Advanced", proficiency: 85 },
+        { name: "Docker", level: "Advanced", proficiency: 85 },
+        { name: "CI/CD", level: "Advanced", proficiency: 80 },
+        { name: "Kubernetes", level: "Intermediate", proficiency: 75 },
+        { name: "Linux", level: "Advanced", proficiency: 85 },
+      ]
+    },
+    {
       title: "UI/UX Design",
-      description: "Figma, Adobe XD, Sketch, User Research, Prototyping",
+      icon: Palette,
       skills: [
-        { name: "Figma", proficiency: 85 },
-        { name: "Adobe XD", proficiency: 80 },
-        { name: "User Research", proficiency: 75 },
-        { name: "Prototyping", proficiency: 80 },
+        { name: "Figma", level: "Advanced", proficiency: 85 },
+        { name: "Adobe XD", level: "Advanced", proficiency: 80 },
+        { name: "Prototyping", level: "Advanced", proficiency: 85 },
+        { name: "Design Systems", level: "Expert", proficiency: 90 },
+        { name: "User Research", level: "Advanced", proficiency: 80 },
       ]
     },
+    {
+      title: "Programming Concepts",
+      icon: Brain,
+      skills: [
+        { name: "Data Structures", level: "Expert", proficiency: 90 },
+        { name: "Algorithms", level: "Expert", proficiency: 90 },
+        { name: "System Design", level: "Advanced", proficiency: 85 },
+        { name: "Design Patterns", level: "Advanced", proficiency: 85 },
+        { name: "Testing", level: "Expert", proficiency: 90 },
+      ]
+    },
+    {
+      title: "Tools & Others",
+      icon: Terminal,
+      skills: [
+        { name: "Git/GitHub", level: "Expert", proficiency: 95 },
+        { name: "VS Code", level: "Expert", proficiency: 95 },
+        { name: "Jira/Trello", level: "Advanced", proficiency: 85 },
+        { name: "Postman", level: "Expert", proficiency: 90 },
+        { name: "Terminal", level: "Expert", proficiency: 90 },
+      ]
+    }
   ]
 
   return (
@@ -49,49 +86,40 @@ export function Skills() {
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 relative">
         <ScrollAnimation>
           <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tighter mb-8 neon-text text-center sm:text-left">
-            Skills
+            Technical Skills
           </h2>
         </ScrollAnimation>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 auto-rows-fr">
-          {skillCards.map((card, index) => (
+
+        <div className="grid gap-6 md:grid-cols-2 auto-rows-fr">
+          {skillCategories.map((category, index) => (
             <ScrollAnimation key={index}>
               <Card className="glassmorphic-depth hover:scale-[1.02] transition-all duration-300 group h-full">
-                <CardContent className="p-5 sm:p-6 relative overflow-hidden h-full flex flex-col">
+                <CardContent className="p-6 relative overflow-hidden h-full">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="absolute inset-0 glass-shimmer opacity-0 group-hover:opacity-100" />
                   
-                  <div className="relative z-10 flex flex-col flex-1">
-                    <h3 className="font-display font-semibold text-lg sm:text-xl mb-3 text-white/90">
-                      {card.title}
-                    </h3>
-                    <p className="text-white/70 font-sans text-sm mb-6">
-                      {card.description}
-                    </p>
-                    <div className="space-y-3 mt-auto">
-                      {card.skills.map((skill, idx) => (
-                        <div key={idx} className="space-y-1.5">
+                  <div className="relative z-10 space-y-6">
+                    <div className="flex items-center gap-3">
+                      <category.icon className="w-5 h-5 text-white/80" />
+                      <h3 className="font-display text-lg font-semibold text-white/90">
+                        {category.title}
+                      </h3>
+                    </div>
+
+                    <div className="space-y-4">
+                      {category.skills.map((skill, idx) => (
+                        <div key={idx} className="space-y-2">
                           <div className="flex justify-between items-center">
-                            <span className="text-white/90 font-sans text-sm">{skill.name}</span>
-                            <span className="text-white/90 font-sans text-sm font-medium">{skill.proficiency}%</span>
+                            <span className="text-white/80 text-sm">{skill.name}</span>
+                            <span className="text-white/60 text-xs">{skill.level}</span>
                           </div>
-                          <div className="h-1.5 glassmorphic-darker rounded-full overflow-hidden backdrop-blur-sm">
-                            <motion.div 
+                          <div className="h-1.5 glassmorphic-darker rounded-full overflow-hidden">
+                            <motion.div
                               initial={{ width: 0 }}
                               whileInView={{ width: `${skill.proficiency}%` }}
                               viewport={{ once: true }}
                               transition={{ duration: 1, ease: "easeOut", delay: idx * 0.1 }}
-                              className="h-full rounded-full"
-                              style={{ 
-                                background: `linear-gradient(90deg, 
-                                  rgba(255, 255, 255, 0.07) 0%, 
-                                  rgba(255, 255, 255, 0.13) 50%, 
-                                  rgba(255, 255, 255, 0.07) 100%
-                                )`,
-                                boxShadow: `
-                                  inset 0 0.5px 1px rgba(255, 255, 255, 0.15),
-                                  0 0.5px 2px rgba(0, 0, 0, 0.1)
-                                `
-                              }}
+                              className="h-full rounded-full bg-gradient-to-r from-blue-500/30 to-purple-500/30"
                             />
                           </div>
                         </div>
@@ -99,6 +127,7 @@ export function Skills() {
                     </div>
                   </div>
 
+                  {/* Decorative Elements */}
                   <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/5 rounded-full blur-[50px] animate-pulse-slow" />
                   <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/5 rounded-full blur-[50px] animate-pulse-slow" />
                 </CardContent>

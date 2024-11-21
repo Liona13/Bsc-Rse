@@ -22,16 +22,18 @@
 @layer components {
   .glassmorphic {
     @apply bg-white/[0.08] backdrop-blur-md 
-           relative overflow-hidden border border-white/[0.15];
+           border border-white/[0.15]
+           shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]
+           relative overflow-hidden;
     transform: translateZ(0);
     backface-visibility: hidden;
   }
 
   .glassmorphic-darker {
-    @apply bg-black/[0.3] backdrop-blur-md 
-           relative overflow-hidden border border-white/[0.08];
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    @apply bg-black/[0.25] backdrop-blur-lg 
+           border border-white/[0.08]
+           shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]
+           relative overflow-hidden;
   }
 
   .neon-text {
@@ -47,24 +49,23 @@
   .glass-reflection::before {
     content: '';
     position: absolute;
-    top: -50%;
+    top: 0;
     left: -50%;
     width: 200%;
-    height: 200%;
-    background: radial-gradient(
-      circle at center,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0.1) 20%,
-      transparent 60%
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
     );
-    transform: rotate(-45deg);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    transform: rotate(45deg);
+    animation: shine 3s infinite;
   }
 
-  .glass-reflection:hover::before {
-    opacity: 1;
+  @keyframes shine {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
   }
 
   .glass-card {
