@@ -4,20 +4,22 @@ import { motion } from "framer-motion"
 import { Calendar, Clock, Tag } from 'lucide-react'
 import { type BlogPost } from "@/lib/blog/types"
 import { Card } from "./card"
-import { MDXRemote } from 'next-mdx-remote'
+import { MDXRemote, MDXRemoteSerializeResult } from 'next-mdx-remote'
 import { MDXProviderComponent } from "../mdx/MDXProvider"
 import { useEffect, useState } from "react"
 import { serialize } from 'next-mdx-remote/serialize'
 import remarkGfm from 'remark-gfm'
 import rehypeHighlight from 'rehype-highlight'
 import React from 'react'
+import { MDXComponents } from '../mdx'
+import type { Plugin } from 'unified'
 
 interface BlogPostProps {
   post: BlogPost
 }
 
 export function BlogPost({ post }: BlogPostProps) {
-  const [mdxSource, setMdxSource] = useState<any>(null)
+  const [mdxSource, setMdxSource] = useState<MDXRemoteSerializeResult | null>(null)
 
   useEffect(() => {
     const prepareMDX = async () => {
@@ -26,7 +28,7 @@ export function BlogPost({ post }: BlogPostProps) {
         const serialized = await serialize(post.content, {
           mdxOptions: {
             remarkPlugins: [remarkGfm],
-            rehypePlugins: [rehypeHighlight],
+            rehypePlugins: [[rehypeHighlight as any]],
             development: process.env.NODE_ENV === 'development',
           },
           parseFrontmatter: true,
@@ -39,6 +41,8 @@ export function BlogPost({ post }: BlogPostProps) {
 
     prepareMDX()
   }, [post.content])
+
+  if (!mdxSource) return null
 
   return (
     <Card className="glassmorphic-depth">
@@ -112,11 +116,9 @@ export function BlogPost({ post }: BlogPostProps) {
           className="prose prose-invert prose-sm sm:prose-base max-w-none"
         >
           <MDXProviderComponent>
-            {mdxSource && (
-              <React.Suspense fallback={<div>Loading...</div>}>
-                <MDXRemote {...mdxSource} />
-              </React.Suspense>
-            )}
+            <React.Suspense fallback={<div>Loading...</div>}>
+              <MDXRemote {...mdxSource} components={MDXComponents} />
+            </React.Suspense>
           </MDXProviderComponent>
         </motion.div>
 

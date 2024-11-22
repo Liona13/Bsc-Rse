@@ -78,7 +78,9 @@ export default function BlogPage() {
         case 'title':
           return a.title.localeCompare(b.title)
         case 'readTime':
-          return parseInt(b.readTime) - parseInt(a.readTime)
+          const aTime = a.readTime ? parseInt(a.readTime) : 0
+          const bTime = b.readTime ? parseInt(b.readTime) : 0
+          return bTime - aTime
         default:
           return 0
       }

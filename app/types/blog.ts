@@ -24,18 +24,20 @@ export interface BlogPost {
   title: string
   description: string
   date: string
-  readTime: string
+  readTime?: string
   author: Author
   tags: string[]
   image?: string
-  featured: boolean
-  seo?: SEO
-  content: string
-  excerpt?: string
-  views?: number
-  likes?: number
+  featured?: boolean
   published: boolean
-  lastModified?: string
+  content: string
+  seo?: {
+    title?: string
+    description?: string
+    keywords?: string[]
+    ogImage?: string
+    canonical?: string
+  }
   series?: {
     name: string
     order: number
@@ -46,7 +48,6 @@ export interface BlogCategory {
   name: string
   description: string
   slug: string
-  count?: number
   image?: string
 }
 

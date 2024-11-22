@@ -3,21 +3,23 @@ export interface BlogPost {
   title: string
   description: string
   date: string
-  readTime: string
-  tags: string[]
-  image?: string
-  content: string
+  readTime?: string
   author: {
     name: string
     avatar?: string
     role?: string
+    social?: {
+      twitter?: string
+      github?: string
+      linkedin?: string
+      website?: string
+    }
   }
+  tags: string[]
+  image?: string
   featured?: boolean
-  seo?: {
-    title?: string
-    description?: string
-    keywords?: string[]
-  }
+  published: boolean
+  content: string
 }
 
 export interface BlogCategory {

@@ -1,48 +1,38 @@
 'use client'
 
-import { Card, CardContent } from "@/components/ui/card"
-import { motion } from "framer-motion"
-import { Calendar, Clock, Tag } from 'lucide-react'
-import Link from "next/link"
-import { blogPosts } from "@/config/blog"
+import { BlogPost } from '@/types/blog'
+import Link from 'next/link'
 
 interface RelatedPostsProps {
   currentPostSlug: string
   currentPostTags: string[]
+  posts: BlogPost[]
 }
 
-export function RelatedPosts({ currentPostSlug, currentPostTags }: RelatedPostsProps) {
-  // This would typically come from your CMS or database
-  const allPosts = blogPosts
-
-  // Filter out current post and find related posts based on tags
-  const relatedPosts = allPosts
-    .filter(post => post.slug !== currentPostSlug)
-    .filter(post => post.tags.some(tag => currentPostTags.includes(tag)))
+export function RelatedPosts({ currentPostSlug, currentPostTags, posts }: RelatedPostsProps) {
+  const relatedPosts = posts
+    .filter((post: BlogPost) => post.slug !== currentPostSlug)
+    .filter((post: BlogPost) => post.tags.some((tag: string) => currentPostTags.includes(tag)))
     .slice(0, 3)
 
+  if (relatedPosts.length === 0) return null
+
   return (
-    <div className="space-y-6">
-      <h3 className="font-display text-xl font-semibold text-white/90">
-        Related Articles
-      </h3>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {relatedPosts.map((post, index) => (
-          <motion.div
-            key={post.slug}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
+    <div className="mt-12">
+      <h3 className="text-xl font-bold mb-6">Related Posts</h3>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {relatedPosts.map((post: BlogPost, index: number) => (
+          <Link 
+            key={post.slug} 
+            href={`/blog/${post.slug}`}
+            className="block"
           >
-            <Link href={`/blog/${post.slug}`}>
-              <Card className="glassmorphic-depth hover:scale-[1.02] transition-all duration-300 group h-full">
-                <CardContent className="p-4 relative overflow-hidden h-full">
-                  {/* Card content similar to blog list */}
-                  {/* ... */}
-                </CardContent>
-              </Card>
-            </Link>
-          </motion.div>
+            {/* Post card content */}
+            <div className="p-4 rounded-lg glassmorphic hover:scale-[1.02] transition-all">
+              <h4 className="font-bold mb-2">{post.title}</h4>
+              <p className="text-sm text-white/70">{post.description}</p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

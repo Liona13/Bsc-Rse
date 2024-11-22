@@ -24,7 +24,11 @@
       "@/components/*": ["./app/components/*"],
       "@/config/*": ["./app/config/*"],
       "@/types/*": ["./app/types/*"]
-    }
+    },
+    "types": ["react/jsx-runtime", "node"],
+    "baseUrl": ".",
+    "jsxImportSource": "react",
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

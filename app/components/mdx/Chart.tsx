@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { useEffect, useRef } from "react"
-import { Line } from 'lucide-react'
+import { LineChart } from 'lucide-react'
 
 interface ChartData {
   labels: string[]
