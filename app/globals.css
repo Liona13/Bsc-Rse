@@ -404,3 +404,18 @@
 :not(pre) > code {
   @apply px-1.5 py-0.5 rounded bg-white/10 text-white/80 text-sm font-mono;
 }
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+  
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

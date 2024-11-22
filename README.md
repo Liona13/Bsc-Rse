@@ -1,17 +1,6 @@
 # Modern Portfolio Website
 
-A modern, responsive portfolio website built with Next.js 14, TypeScript, Tailwind CSS, and Framer Motion.
-
-## Features
-
-- 🎨 Modern and Clean Design with Glassmorphism effects
-- 🚀 Built with Next.js 14 and TypeScript
-- 📱 Fully Responsive
-- ✨ Smooth Animations with Framer Motion
-- 📝 MDX Blog Support
-- 📄 PDF Resume Generation
-- 🌙 Dark Mode Optimized
-- 🎯 SEO Optimized
+A modern, responsive portfolio website built with Next.js 14, TypeScript, and Tailwind CSS.
 
 ## Tech Stack
 
@@ -19,8 +8,8 @@ A modern, responsive portfolio website built with Next.js 14, TypeScript, Tailwi
 - TypeScript
 - Tailwind CSS
 - Framer Motion
-- MDX
-- PDF-lib
+- MDX Support
+- Radix UI Components
 
 ## Getting Started
 

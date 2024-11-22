@@ -1,5 +1,7 @@
 import { Montserrat, Raleway, Inter } from 'next/font/google'
 import './globals.css'
+import { Metadata } from 'next'
+import { siteConfig } from '@/config/site'
 
 const montserrat = Montserrat({ 
   subsets: ['latin'],
@@ -22,19 +24,38 @@ const inter = Inter({
   display: 'swap',
 })
 
-export const metadata = {
-  title: 'Portfolio',
-  description: 'My professional portfolio',
+export const metadata: Metadata = {
+  title: {
+    default: siteConfig.title,
+    template: `%s | ${siteConfig.title}`,
+  },
+  description: siteConfig.description,
   openGraph: {
-    title: 'Portfolio',
-    description: 'My professional portfolio',
-    url: 'https://example.com',
-    siteName: 'Portfolio',
-    images: [{ url: '/favicon.svg' }],
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
+    images: [{ url: siteConfig.ogImage }],
+    locale: 'en-US',
     type: 'website',
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  twitter: {
+    title: siteConfig.title,
+    card: 'summary_large_image',
+  },
   icons: {
-    icon: '/favicon.svg',
+    shortcut: '/favicon.ico',
   },
 }
 
